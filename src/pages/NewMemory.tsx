@@ -1,15 +1,15 @@
 import React, {useRef, useState} from "react";
 import {
   IonButton,
-  IonCol,
-  IonGrid,
+  IonCol, IonContent,
+  IonGrid, IonHeader,
   IonInput,
   IonItem,
   IonLabel,
   IonPage,
   IonRow,
   IonSelect,
-  IonSelectOption, useIonAlert
+  IonSelectOption, IonTitle, IonToolbar, useIonAlert, IonBackButton, IonButtons
 } from "@ionic/react";
 import {getDownloadURL, getStorage, ref, uploadBytes} from "firebase/storage";
 import {addDoc, collection, getFirestore} from "firebase/firestore";
@@ -69,36 +69,46 @@ const NewMemory: React.FC = () => {
     setFileName('memory/'+event.target?.files![0].name);
   }
 
-
   return(
     <IonPage>
-      <IonGrid>
-        <form onSubmit={insertHandler} >
-          <IonRow>
-            <IonCol className={'ion-text-center'}>
-              <h1>Add New Memory</h1>
-            </IonCol>
-          </IonRow>
-          <IonItem>
-            <IonLabel position={'floating'}>Memory Title</IonLabel>
-            <IonInput ref={title} required clearInput/>
-          </IonItem>
-          <IonItem>
-            <IonSelect
-              interface={'popover'} value={chosenMemoryType}
-              onIonChange={(e) => setChosenMemoryType(e.detail.value)}>
-              <IonSelectOption value={'good'}>Good Memory</IonSelectOption>
-              <IonSelectOption value={'bad'}>Bad Memory</IonSelectOption>
-            </IonSelect>
-          </IonItem>
-          <IonItem>
-            <IonLabel position={'stacked'}>Image</IonLabel>
-            <input type={'file'} required onChange={fileChangeHandler}/>
-          </IonItem>
-          <IonButton type={'submit'} expand={'block'}>Insert</IonButton>
-          <IonButton type={'reset'} expand={'block'} color={'tertiary'}>Reset</IonButton>
-        </form>
-      </IonGrid>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>New Memory</IonTitle>
+          <IonButtons slot={'start'}>
+            <IonBackButton defaultHref={'/student-memory/good-memories'}/>
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        <IonGrid>
+          <form onSubmit={insertHandler}>
+            <IonRow>
+              <IonCol className={'ion-text-center'}>
+                <h1>Add New Memory</h1>
+              </IonCol>
+            </IonRow>
+            <IonItem>
+              <IonLabel position={'floating'}>Memory Title</IonLabel>
+              <IonInput ref={title} required clearInput/>
+            </IonItem>
+            <IonItem>
+              <IonSelect
+                interface={'popover'} value={chosenMemoryType}
+                onIonChange={(e) => setChosenMemoryType(e.detail.value)}>
+                <IonSelectOption value={'good'}>Good Memory</IonSelectOption>
+                <IonSelectOption value={'bad'}>Bad Memory</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+            <IonItem>
+              <IonLabel position={'stacked'}>Image</IonLabel>
+              <input type={'file'} required onChange={fileChangeHandler}/>
+            </IonItem>
+            <IonButton type={'submit'} expand={'block'}>Insert</IonButton>
+            <IonButton type={'reset'} expand={'block'} color={'tertiary'}>Reset</IonButton>
+          </form>
+        </IonGrid>
+      </IonContent>
+
     </IonPage>
   )
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
   IonButton,
   IonButtons, IonCard, IonCardHeader, IonCardTitle, IonCol, IonContent, IonGrid,
@@ -11,30 +11,28 @@ import {
 } from "@ionic/react";
 import {add} from "ionicons/icons";
 import Memory from "../data/Memory";
-import {collection, getDocs, getFirestore, query, where, collectionGroup} from "firebase/firestore";
-import {getStorage} from "firebase/storage";
-import {Student} from "../data/Student";
+import {collection, getDocs, getFirestore, query, where} from "firebase/firestore";
 
 const GoodMemories: React.FC = () => {
 
   // Firebase 9 Modular
-  const storage = getStorage();
   const db = getFirestore()
 
   const [goodMemories, setGoodMemories] = useState<Memory[]>([])
 
-  const getData = async () => {
-    const goodOnly = query(collectionGroup(db,'memories'),
+  const getGoodMemories = async () => {
+    const goodOnly = query(collection(db,'memories'),
       where('type','==','good'))
-    // const querySnapshot = await getDocs(collection(db,'students'));
-
     const querySnapshot = await getDocs(goodOnly);
     console.log(querySnapshot.docs);
     setGoodMemories(querySnapshot.docs.map((doc) => doc.data() as Memory))
+    // querySnapshot.forEach((doc) => {
+    //   console.log(doc.id, " => ", doc.data());
+    // })
   }
 
   useEffect( () => {
-    getData().then(() => '');
+    getGoodMemories().then(() => '');
   },[])
 
   return(
